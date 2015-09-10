@@ -31,7 +31,6 @@ global.mc = require(__dirname + "/lib/memcached");
 var Logger  = require(__dirname + "/lib/logger");
 global.log  = new Logger(__dirname + "/logs/debug.log");
 global.loge = new Logger(__dirname + "/logs/exception.log");
-global.logg = new Logger(__dirname + "/logs/game.log");
 ////////////////////////////////////////////////////////////////
 
 app.use('/', routes);

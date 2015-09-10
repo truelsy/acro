@@ -31,7 +31,6 @@ router.post('/', function(req, res) {
                 // Database에서　조회　성공．（결과　전송）
                 log.info("GetData From Database. socialid(%s)", socialid);
                 res.send(result[0][0]);
-                logg.info(result[0][0]);
 
                 // Memcached에　저장
                 mc.set(socialid, result[0][0], function(err) {
@@ -45,7 +44,6 @@ router.post('/', function(req, res) {
             // Memcached에서　조회　성공．（결과　전송)
             log.info("GetData From Memcached. socialid(%s)", socialid);
             res.send(value);
-            logg.info(value);
         }
     });
 });
