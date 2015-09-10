@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Library 모듈　적재
 global.db = require(__dirname + "/lib/database");
 global.mc = require(__dirname + "/lib/memcached");
+global.mongo = require(__dirname + "/lib/mongodb");
 
 var Logger  = require(__dirname + "/lib/logger");
 global.log  = new Logger(__dirname + "/logs/debug.log");
@@ -42,8 +43,10 @@ app.use('/users', users);
 ////////////////////////////////////////////////////////////////
 // Routing...
 var login = require('./routes/login');
+var items = require('./routes/items');
 
 app.use('/login', login);
+app.use('/items', items);
 ////////////////////////////////////////////////////////////////
 
 

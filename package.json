@@ -18,6 +18,8 @@
 	"winston": "1.0.1",
 	"mongoose": "4.1.5",
 	"moment": "2.10.6",
-	"memcached": "2.1.0"
+	"memcached": "2.1.0",
+    "mongo-native": "1.0.28",
+    "mongodb": "2.0.42"
   }
 }
