@@ -28,6 +28,8 @@ router.post('/', function(req, res) {
                     return;
                 }
 
+                log.debug("var_error : ", result[0][0].var_err);
+
                 // Database에서　조회　성공．（결과　전송）
                 log.info("GetData From Database. socialid(%s)", socialid);
                 res.send(result[0][0]);

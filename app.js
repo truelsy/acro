@@ -5,9 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var app = express();
 
 // view engine setup
@@ -33,10 +30,6 @@ var Logger  = require(__dirname + "/lib/logger");
 global.log  = new Logger(__dirname + "/logs/debug.log");
 global.loge = new Logger(__dirname + "/logs/exception.log");
 ////////////////////////////////////////////////////////////////
-
-app.use('/', routes);
-app.use('/users', users);
-
 
 
 
