@@ -1,0 +1,20 @@
+#!/bin/bash
+#APPHOME=$HOME/Documents/workspace_nodejs/acro
+case "$1" in
+  start)
+  	forever start -l $PWD/logs/forever.log -a -w ./bin/www
+    ;;
+  stop)
+    forever stop ./bin/www
+    ;;
+  restart)
+    forever restart ./bin/www
+    ;;
+  list)
+    forever list
+    ;;
+  *)
+    echo ###partial###1DA3B5BA-57BF-4A8D-A817-5300E487ADB6quot;Usage: $0 {start|stop|restart|list}"
+    exit 1
+esac
+exit 0
