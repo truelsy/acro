@@ -5,6 +5,8 @@
 var express = require('express');
 var router = express.Router();
 var util = require('util');
+var sendPacket = require('../lib/sendPacket');
+var ack = require('../lib/enum').ack;
 
 var loginFromDatabase = function(socialid, res) {
     var loginQuery = util.format('call sp_info_login(\'%s\');', socialid);
@@ -13,13 +15,13 @@ var loginFromDatabase = function(socialid, res) {
     db.execute(loginQuery, function(err, result, field) {
         var dbResult = result[0][0];
         if (err || 0 >= dbResult.user_seq) {
-            res.send({ack: '-1'});
+            sendPacket.Send(res, ack.ACK_ERROR);
             return;
         }
 
         // Database에서　조회　성공．（결과　전송）
         log.info("GetData From Database. socialid(%s)", socialid);
-        res.send({ack: '1', user_info: dbResult});
+        sendPacket.Send(res, ack.ACK_OK, {user_info: dbResult});
 
         // Memcached에　저장
         mc.set(socialid, dbResult, function(err) {
@@ -36,7 +38,7 @@ router.post('/', function(req, res) {
 
     if (undefined == socialid || 0 >= socialid.length) {
         log.error("socialid is null.");
-        res.send({ack: '-1'});
+        sendPacket.Send(res, ack.ACK_ERROR);
         return;
     }
 
@@ -48,7 +50,7 @@ router.post('/', function(req, res) {
 
         // Memcached에서　조회　성공．（결과　전송)
         log.info("GetData From Memcached. socialid(%s)", socialid);
-        res.send({ack: '1', user_info: mcResult});
+        sendPacket.Send(res, ack.ACK_OK, {user_info: mcResult});
     });
 });
 
