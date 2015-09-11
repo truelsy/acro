@@ -16,6 +16,7 @@ var loginFromDatabase = function(socialid, res) {
     // Memcached에서　못　찾은　경우　Database에서　조회
     db.execute(loginQuery, function(err, result) {
         var dbResult = result[0][0];
+        
         if (err || 0 >= dbResult.user_seq) {
             sendPacket.Send(res, ack.ERROR);
             return;
