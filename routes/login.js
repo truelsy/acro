@@ -2,6 +2,8 @@
  * Created by mega on 15. 9. 7.
  */
 
+/*global mc */
+
 var express = require('express');
 var router = express.Router();
 var util = require('util');
@@ -12,16 +14,16 @@ var loginFromDatabase = function(socialid, res) {
     var loginQuery = util.format('call sp_info_login(\'%s\');', socialid);
 
     // Memcached에서　못　찾은　경우　Database에서　조회
-    db.execute(loginQuery, function(err, result, field) {
+    db.execute(loginQuery, function(err, result) {
         var dbResult = result[0][0];
         if (err || 0 >= dbResult.user_seq) {
-            sendPacket.Send(res, ack.ACK_ERROR);
+            sendPacket.Send(res, ack.ERROR);
             return;
         }
 
         // Database에서　조회　성공．（결과　전송）
         log.info("GetData From Database. socialid(%s)", socialid);
-        sendPacket.Send(res, ack.ACK_OK, {user_info: dbResult});
+        sendPacket.Send(res, ack.OK, {user_info: dbResult});
 
         // Memcached에　저장
         mc.set(socialid, dbResult, function(err) {
@@ -30,15 +32,14 @@ var loginFromDatabase = function(socialid, res) {
             }
         });
     });
-}
+};
 
-/* GET users listing. */
 router.post('/', function(req, res) {
-    var socialid = req.body.socialid;
+    var socialid = req.body['socialid'];
 
     if (undefined == socialid || 0 >= socialid.length) {
         log.error("socialid is null.");
-        sendPacket.Send(res, ack.ACK_ERROR);
+        sendPacket.Send(res, ack.ERROR);
         return;
     }
 
@@ -50,7 +51,7 @@ router.post('/', function(req, res) {
 
         // Memcached에서　조회　성공．（결과　전송)
         log.info("GetData From Memcached. socialid(%s)", socialid);
-        sendPacket.Send(res, ack.ACK_OK, {user_info: mcResult});
+        sendPacket.Send(res, ack.OK, {user_info: mcResult});
     });
 });
 
