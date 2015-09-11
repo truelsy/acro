@@ -17,7 +17,7 @@ var loginFromDatabase = function(socialid, res) {
     db.execute(loginQuery, function(err, result) {
         var dbResult = result[0][0];
         if (err || 0 >= dbResult.user_seq) {
-            sendPacket.Send(res, ack.ERROR);
+            sendPacket.Send(res, ack.ERROR, err.message);
             return;
         }
 
@@ -39,8 +39,7 @@ router.post('/', function(req, res) {
     var socialid = req.body['socialid'];
 
     if (undefined == socialid || 0 >= socialid.length) {
-        log.error("socialid is null.");
-        sendPacket.Send(res, ack.ERROR);
+        sendPacket.Send(res, ack.ERROR, 'socialid empty');
         return;
     }
 

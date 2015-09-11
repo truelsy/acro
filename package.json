@@ -21,6 +21,7 @@
 	"memcached": "2.1.0",
     "mongo-native": "1.0.28",
     "mongodb": "2.0.42",
+	"mongodb-autoincrement": "1.0.0",
 	"enum": "2.1.0"
   }
 }
