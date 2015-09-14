@@ -26,19 +26,20 @@ global.db = require(__dirname + "/lib/database");
 global.mc = require(__dirname + "/lib/memcached");
 
 var Logger  = require(__dirname + "/lib/logger");
-global.log  = new Logger(__dirname + "/logs/debug.log");
-global.loge = new Logger(__dirname + "/logs/exception.log");
+global.log  = new Logger(__dirname + "/logs/debug");
+global.loge  = new Logger(__dirname + "/logs/exception");
+
+var mongo = require(__dirname + "/lib/mongodb");
+var redis = require(__dirname + "/lib/redis");
 ////////////////////////////////////////////////////////////////
 
 
 
 ////////////////////////////////////////////////////////////////
 // Routing...
-var login = require('./routes/login');
-var items = require('./routes/items');
-
-app.use('/login', login);
-app.use('/items', items);
+app.use('/login', require('./routes/login'));
+app.use('/items', require('./routes/items'));
+app.use('/ranking', require('./routes/ranking'));
 ////////////////////////////////////////////////////////////////
 
 
@@ -73,6 +74,11 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
+});
+
+
+process.on('uncaughtException', function (err) {
+	loge.error('Caught exception: ' + err);
 });
 
 
