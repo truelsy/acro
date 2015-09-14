@@ -8,7 +8,7 @@ var redis = require('../lib/redis');
 var sendPacket = require('../lib/sendPacket');
 var ack = require('../lib/enum').ack;
 
-router.post('/insert', function(req, res) {
+router.post('/insert', function (req, res) {
 	var user_seq = req.body['user_seq'];
 	var score = req.body['score'];
 
@@ -17,7 +17,7 @@ router.post('/insert', function(req, res) {
 		return;
 	}
 
-	redis.zincrby('RankKey', score, user_seq, function(err, curScore) {
+	redis.zincrby('RankKey', score, user_seq, function (err, curScore) {
 		if (err) {
 			sendPacket.Send(res, ack.ERROR);
 			return;
@@ -28,8 +28,8 @@ router.post('/insert', function(req, res) {
 });
 
 
-router.post('/top10', function(req, res) {
-	redis.zrevrange('RankKey', 0, 9, function(err, result) {
+router.post('/top10', function (req, res) {
+	redis.zrevrange('RankKey', 0, 9, function (err, result) {
 		if (err) {
 			sendPacket.Send(res, ack.ERROR);
 			return;
