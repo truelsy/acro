@@ -2,6 +2,8 @@
  * Created by mega on 15. 9. 14.
  */
 
+/*global mc */
+
 var express = require('express');
 var router = express.Router();
 var redis = require('../lib/redis');
@@ -47,10 +49,7 @@ var loadRankerFromRedis = function (res) {
 
 			// TopRanker의 정보를 Memcached에 저장
 			mc.set(rankKey, redisResult, function (err) {
-				if (err) {
-					log.error("RankerInfo Memcached Set Failed.. rankKey(%s)", rankKey);
-					return;
-				}
+				if (err) return;
 				log.debug("RankerInfo Memcached Set OK! rankKey(%s) count(%d)", rankKey, redisResult.length);
 			});
 		}); // async.parallel

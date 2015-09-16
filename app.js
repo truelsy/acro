@@ -23,14 +23,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 ////////////////////////////////////////////////////////////////
 // Library 모듈　적재
+require(__dirname + "/lib/mongodb");
+require(__dirname + "/lib/redis");
+
 global.db = require(__dirname + "/lib/database");
 global.mc = require(__dirname + "/lib/memcached");
-
 global.log = require(__dirname + "/lib/logger").log;
 global.loge = require(__dirname + "/lib/logger").loge;
-
-var mongo = require(__dirname + "/lib/mongodb");
-var redis = require(__dirname + "/lib/redis");
 
 var sendPacket = require(__dirname + '/lib/sendPacket');
 var ack = require(__dirname + '/lib/enum').ack;

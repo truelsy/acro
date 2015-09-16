@@ -29,13 +29,10 @@ router.post('/insert', function (req, res) {
 	};
 
 	mongo.Insert('items', insJson, function (err, result) {
-		if (err) {
-			log.error('MongoDB Insert Error. cause(' + err.message, ')');
-			sendPacket.Send(res, ack.ERROR, err.message);
-			return;
-		}
-
-		var resJson = {item_info: result.ops};
+		if (err) throw err;
+		var resJson = {
+			item_info: result.ops
+		};
 		sendPacket.Send(res, ack.OK, resJson);
 	});
 });
@@ -43,14 +40,11 @@ router.post('/insert', function (req, res) {
 
 router.post('/select', function (req, res) {
 	var user_seq = req.body['user_seq'];
-	var condJson = {user_seq: user_seq};
+	var condJson = {
+		user_seq: user_seq
+	};
 	mongo.Select('items', condJson, function (err, result) {
-		if (err) {
-			log.error('MongoDB Select Error. cause(' + err.message, ')');
-			sendPacket.Send(res, ack.ERROR, err.message);
-			return;
-		}
-
+		if (err) throw err;
 		sendPacket.Send(res, ack.OK, {item_info: result});
 	});
 });

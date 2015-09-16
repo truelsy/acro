@@ -38,10 +38,7 @@ var loginFromDatabase = function (socialid, countryCode, res) {
 			if (err) throw err;
 
 			mc.set(socialid, dbResult, function (err) {
-				if (err) {
-					log.error("Memcached Set Failed.. socialid(%s)", socialid);
-					return;
-				}
+				if (err) return;
 				log.debug("Memcached Set OK! socialid(%s) userseq(%d)", socialid, dbResult.user_seq);
 			});
 		});
