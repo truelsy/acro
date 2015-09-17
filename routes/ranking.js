@@ -62,7 +62,7 @@ router.post('/insert', function (req, res) {
 	var score = req.body['score'];
 
 	if (!user_seq || !score) {
-		throw new Error('Arguments is not enough');
+		throw new Error('IncrScore Command Arguments is not enough');
 	}
 
 	async.waterfall([
@@ -77,7 +77,7 @@ router.post('/insert', function (req, res) {
 				});
 			}
 		],
-		
+
 		function (err, curScore, curRank) {
 			if (err) throw err;
 			var resJson = {
@@ -108,7 +108,7 @@ router.post('/rank', function (req, res) {
 	var user_seq = req.body['user_seq'];
 
 	if (!user_seq) {
-		throw new Error('Arguments is not enough');
+		throw new Error('Rank Command Arguments is not enough');
 	}
 
 	redis.zrevrank(rankKey, user_seq, function (err, curRank) {
