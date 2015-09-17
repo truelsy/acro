@@ -65,10 +65,28 @@ router.post('/insert', function (req, res) {
 		throw new Error('Arguments is not enough');
 	}
 
-	redis.zincrby(rankKey, score, user_seq, function (err, curScore) {
-		if (err) throw err;
-		sendPacket.Send(res, ack.OK, {cur_score: curScore});
-	});
+	async.waterfall([
+			function (callback) {
+				redis.zincrby(rankKey, score, user_seq, function (err, curScore) {
+					callback(null, curScore);
+				});
+			},
+			function (curScore, callback) {
+				redis.zrevrank(rankKey, user_seq, function (err, curRank) {
+					callback(null, curScore, curRank);
+				});
+			}
+		],
+		
+		function (err, curScore, curRank) {
+			if (err) throw err;
+			var resJson = {
+				cur_score: curScore,
+				cur_rank: curRank
+			}
+			sendPacket.Send(res, ack.OK, resJson);
+		}
+	);
 });
 
 
@@ -83,6 +101,19 @@ router.post('/top10', function (req, res) {
 
 		// 응답
 		sendPacket.Send(res, ack.OK, {rank_info: mcResult});
+	});
+});
+
+router.post('/rank', function (req, res) {
+	var user_seq = req.body['user_seq'];
+
+	if (!user_seq) {
+		throw new Error('Arguments is not enough');
+	}
+
+	redis.zrevrank(rankKey, user_seq, function (err, curRank) {
+		if (err) throw err;
+		sendPacket.Send(res, ack.OK, {cur_rank: curRank});
 	});
 });
 
